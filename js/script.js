@@ -129,7 +129,7 @@
                   '<p><strong>[BloodDonor]:</strong> i have trauma from this. i can\'t use convention bathrooms anymore</p>' +
                   '<p><strong>[Kaiman]:</strong> skill issue</p>' +
                   '<hr>' +
-                  '<p><em>Note: These logs have been authenticated by the CrocWolf Law Group Digital Forensics Division.</em></p>'
+                  '<p><em>Note: These logs have been authenticated by the Meowfurshot Law Group Digital Forensics Division.</em></p>'
         },
         'staff-statements': {
             title: 'Exhibit C &mdash; Convention Staff Statements',
@@ -147,7 +147,7 @@
         },
         'pattern-analysis': {
             title: 'Exhibit D &mdash; Pattern Analysis Report',
-            body: '<h4>PATTERN ANALYSIS &mdash; THE CROCWOLF LAW GROUP</h4>' +
+            body: '<h4>PATTERN ANALYSIS &mdash; MEOWFURSHOT LAW GROUP</h4>' +
                   '<p><strong>Prepared by:</strong> Senior Case Analyst Team</p>' +
                   '<p><strong>Date:</strong> April 2026</p>' +
                   '<hr>' +
