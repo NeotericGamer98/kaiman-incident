@@ -22,7 +22,6 @@
                     btn.textContent = '\u2600 Light';
                 }
             });
-            // Set button text based on current theme
             if (document.documentElement.getAttribute('data-theme') === 'dark') {
                 btn.textContent = '\u2600 Light';
             } else {
@@ -31,41 +30,96 @@
         }
     })();
 
+    // --- Gavel Animation on Load ---
+    (function gavelStrike() {
+        var gavel = document.getElementById('gavel-overlay');
+        if (!gavel) return;
+        var hasSeen = sessionStorage.getItem('kaiman-gavel');
+        if (hasSeen) return;
+        gavel.classList.add('active');
+        sessionStorage.setItem('kaiman-gavel', 'true');
+        setTimeout(function () {
+            gavel.classList.remove('active');
+        }, 1800);
+    })();
+
+    // --- Subpoena Status Progress ---
+    (function subpoenaProgress() {
+        var fill = document.getElementById('status-fill');
+        var labels = document.querySelectorAll('.status-labels span');
+        if (!fill || !labels.length) return;
+        var steps = [
+            { label: 'Complaint Drafted', pct: 20 },
+            { label: 'Evidence Gathered', pct: 40 },
+            { label: 'Papers Drawn Up', pct: 60 },
+            { label: 'Process Server Dispatched', pct: 80 },
+            { label: 'Served', pct: 100 }
+        ];
+        var current = 2; // index into steps — "Papers Drawn Up"
+        var pct = steps[current].pct;
+        var text = document.getElementById('status-text');
+        setTimeout(function () {
+            fill.style.width = pct + '%';
+            if (text) text.textContent = 'Current Status: ' + steps[current].label;
+            labels.forEach(function (s, i) {
+                if (i === current) s.classList.add('status-label-active');
+                else s.classList.remove('status-label-active');
+            });
+        }, 500);
+    })();
+
+    // --- Likelihood Meter ---
+    (function likelihoodMeter() {
+        var display = document.getElementById('likelihood-display');
+        var fill = document.getElementById('likelihood-fill');
+        if (!display || !fill) return;
+        var levels = [
+            { pct: 15, label: 'Very Unlikely', cls: 'low' },
+            { pct: 35, label: 'Unlikely', cls: 'low' },
+            { pct: 55, label: 'Possible', cls: 'medium' },
+            { pct: 75, label: 'Likely', cls: 'medium' },
+            { pct: 92, label: 'Very Likely', cls: 'high' },
+            { pct: 99, label: 'Kaiman is Toast', cls: 'high' }
+        ];
+        var idx = 0;
+        function update() {
+            var lv = levels[idx];
+            display.textContent = lv.pct + '%';
+            display.className = 'likelihood-display ' + lv.cls;
+            fill.style.width = lv.pct + '%';
+            fill.className = 'likelihood-bar-fill ' + lv.cls;
+            document.getElementById('likelihood-label').textContent = lv.label;
+            idx = (idx + 1) % levels.length;
+        }
+        update();
+        setInterval(update, 4000);
+    })();
+
     // --- Testimonial Form ---
     var testimonialForm = document.getElementById('testimonial-form');
     var formSuccess = document.getElementById('form-success');
-
     if (testimonialForm) {
         testimonialForm.addEventListener('submit', function (e) {
             e.preventDefault();
             testimonialForm.reset();
             testimonialForm.style.display = 'none';
-            if (formSuccess) {
-                formSuccess.style.display = 'block';
-            }
+            if (formSuccess) formSuccess.style.display = 'block';
         });
     }
 
     // --- Comment Form ---
     var commentForm = document.getElementById('comment-form');
     var commentsContainer = document.getElementById('comments-container');
-
     if (commentForm) {
         commentForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
             var author = document.getElementById('comment-author').value.trim();
             var text = document.getElementById('comment-text').value.trim();
-
             if (!author || !text) return;
-
             var today = new Date();
             var dateStr = today.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+                year: 'numeric', month: 'long', day: 'numeric'
             });
-
             var commentDiv = document.createElement('div');
             commentDiv.className = 'comment';
             commentDiv.innerHTML =
@@ -73,23 +127,87 @@
                     '<span class="comment-author">' + escapeHtml(author) + '</span>' +
                     '<span class="comment-date">' + dateStr + '</span>' +
                 '</div>' +
-                '<p class="comment-body">' + escapeHtml(text) + '</p>';
-
+                '<p class="comment-body">' + escapeHtml(text) + '</p>' +
+                '<div class="reactions">' +
+                    '<button class="reaction-btn" data-reaction="paw">\uD83D\uDC3E <span class="reaction-count">0</span></button>' +
+                    '<button class="reaction-btn" data-reaction="fire">\uD83D\uDD25 <span class="reaction-count">0</span></button>' +
+                    '<button class="reaction-btn" data-reaction="poop">\uD83D\uDCA9 <span class="reaction-count">0</span></button>' +
+                '</div>';
             if (commentsContainer) {
                 commentsContainer.appendChild(commentDiv);
             } else {
                 var wrap = document.querySelector('.comment-form-wrap');
-                if (wrap) {
-                    wrap.parentNode.insertBefore(commentDiv, wrap);
-                }
+                if (wrap) wrap.parentNode.insertBefore(commentDiv, wrap);
             }
-
             commentForm.reset();
-
             var badge = document.querySelector('.badge');
             if (badge) {
-                var totalComments = document.querySelectorAll('.comment').length;
-                badge.textContent = totalComments + ' Comments';
+                badge.textContent = document.querySelectorAll('.comment').length + ' Comments';
+            }
+        });
+    }
+
+    // --- Paw Print Reactions (delegated) ---
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.reaction-btn');
+        if (!btn) return;
+        var countSpan = btn.querySelector('.reaction-count');
+        if (!countSpan) return;
+        var count = parseInt(countSpan.textContent, 10) || 0;
+        if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            countSpan.textContent = Math.max(0, count - 1);
+        } else {
+            btn.classList.add('active');
+            countSpan.textContent = count + 1;
+        }
+    });
+
+    // --- Kaiman Alert Signup ---
+    var alertForm = document.getElementById('alert-form');
+    if (alertForm) {
+        alertForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var input = alertForm.querySelector('input');
+            if (input) input.value = '';
+            alertForm.innerHTML = '<p style="color:var(--accent);font-weight:bold;">\u2713 You\'re on the Kaiman Alert list. We\'ll notify you if Kaiman attends another con.</p>';
+        });
+    }
+
+    // --- Merch Add to Cart Parody ---
+    document.querySelectorAll('.btn-merch').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (this.classList.contains('sold-out')) return;
+            var orig = this.textContent;
+            this.textContent = '\u2713 Added!';
+            this.style.background = '#2ecc71';
+            this.style.color = '#fff';
+            var self = this;
+            setTimeout(function () {
+                self.textContent = orig;
+                self.style.background = '';
+                self.style.color = '';
+            }, 2000);
+        });
+    });
+
+    // --- Defense Fund Donate Parody ---
+    var donateBtn = document.getElementById('donate-btn');
+    if (donateBtn) {
+        donateBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var fill = document.getElementById('fund-fill');
+            var total = document.getElementById('fund-total');
+            if (fill && total) {
+                var current = parseFloat(total.getAttribute('data-amount')) || 0;
+                var donated = parseFloat((Math.random() * 5).toFixed(2));
+                // Donations of $0.02, $1.50, etc — keep it absurdly low
+                var newTotal = current + donated;
+                total.textContent = '$' + newTotal.toFixed(2);
+                total.setAttribute('data-amount', newTotal.toFixed(2));
+                var pct = Math.min(100, (newTotal / 50000) * 100);
+                fill.style.width = pct + '%';
             }
         });
     }
@@ -135,13 +253,13 @@
             title: 'Exhibit C &mdash; Convention Staff Statements',
             body: '<h4>SWORN STATEMENTS &mdash; CONVENTION STAFF</h4>' +
                   '<p><strong>Statement 1 &mdash; MFF Security Volunteer "M."</strong></p>' +
-                  '<p>"I was stationed near the bathroom entrance during Midwest FurFest 2025. A distressed attendee approached me and reported being touched inappropriately by someone matching Kaiman\'s description. I noted the report in my log but did not witness the incident firsthand."</p>' +
+                  '<p>"I was stationed near the bathroom entrance during Midwest FurFest 2025."</p>' +
                   '<hr>' +
                   '<p><strong>Statement 2 &mdash; FWA Staff Member "J."</strong></p>' +
-                  '<p>"At FWA 2025, I overheard two attendees discussing an incident in the bathroom involving a croc-wolf hybrid. When I approached, one of them said, \'He touched my friend\'s back without asking.\' I advised them to file a formal complaint. One of the victims was named BloodDonor."</p>' +
+                  '<p>"At FWA 2025, I overheard two attendees discussing an incident in the bathroom. The victim was named BloodDonor."</p>' +
                   '<hr>' +
                   '<p><strong>Statement 3 &mdash; Unaffiliated Third Party "T."</strong></p>' +
-                  '<p>"I was in the stall next to them. I heard everything. There was definitely touching. Sounded like it was the small of the back specifically."</p>' +
+                  '<p>"I was in the stall next to them. Sounded like it was the small of the back specifically."</p>' +
                   '<hr>' +
                   '<p><em>All statements collected under convention protocol.</em></p>'
         },
@@ -152,32 +270,59 @@
                   '<p><strong>Date:</strong> April 2026</p>' +
                   '<hr>' +
                   '<h4>FINDINGS</h4>' +
-                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across three different conventions (FWA, MFF, MegaPlex). This suggests a targeted pattern of behavior.</p>' +
-                  '<p><strong>2. Time of Day:</strong> All incidents occurred during peak convention hours (2PM&ndash;5PM) when bathrooms are moderately trafficked.</p>' +
-                  '<p><strong>3. Targeting Pattern:</strong> Victims were known associates of the defendant, including one identified as "BloodDonor," suggesting a breach of social trust rather than random contact.</p>' +
-                  '<p><strong>4. Body Part Specificity:</strong> The "small of the back" was the contact zone in every reported incident. The defendant has publicly claimed this is a "consensual zone."</p>' +
-                  '<p><strong>5. Defendant Profile:</strong> Kaiman, a Crocodile/Grey Wolf hybrid, age 26, from the Midwestern United States. Georgia Tech graduate (BS Computer Science, Intelligence &amp; Media). Active content creator on Twitch and YouTube. Has demonstrated knowledge of anatomy but refuses to apply it to consent discussions.</p>' +
+                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across three different conventions (FWA, MFF, MegaPlex).</p>' +
+                  '<p><strong>2. Time of Day:</strong> All incidents occurred during peak convention hours (2PM&ndash;5PM).</p>' +
+                  '<p><strong>3. Targeting Pattern:</strong> Victims were known associates, including "BloodDonor."</p>' +
+                  '<p><strong>4. Body Part Specificity:</strong> The "small of the back" was the contact zone in every incident.</p>' +
+                  '<p><strong>5. Defendant Profile:</strong> Kaiman, 26, Crocodile/Grey Wolf hybrid, Georgia Tech CS grad.</p>' +
                   '<hr>' +
-                  '<p><strong>Conclusion:</strong> A clear and consistent pattern of behavior has been established across multiple conventions.</p>'
+                  '<p><strong>Conclusion:</strong> A clear and consistent pattern has been established.</p>'
         },
         'defendant-statements': {
             title: 'Exhibit E &mdash; Defendant\'s Public Statements',
             body: '<h4>PUBLIC STATEMENTS &mdash; KAIMAN (DEFENDANT)</h4>' +
-                  '<p><strong>Source:</strong> Telegram, Twitter/Bluesky, kaiman.blue</p>' +
+                  '<p><strong>Source:</strong> Telegram, Bluesky, kaiman.blue</p>' +
                   '<p><strong>Date Range:</strong> January 2025 &ndash; April 2026</p>' +
                   '<hr>' +
-                  '<p><strong>Statement 1 (Telegram, January 2025):</strong></p>' +
-                  '<p>"It was an accident. I was just trying to get to the sink."</p>' +
-                  '<p><strong>Statement 2 (Telegram, December 2025):</strong></p>' +
-                  '<p>"These people are fake victims. I never touched anyone. This is all a smear campaign because I went to Georgia Tech and they didn\'t."</p>' +
-                  '<p><strong>Statement 3 (Bluesky, April 2026):</strong></p>' +
-                  '<p>"The small of the back is a neutral zone. Like a handshake. You don\'t need consent for a handshake. I have a CS degree from Georgia Tech, I know what I\'m talking about."</p>' +
-                  '<p><strong>Statement 4 (kaiman.blue blog comment, April 2026):</strong></p>' +
-                  '<p>"I\'m the real victim here. I can\'t even go to conventions anymore without being accused of something. My Twitch stream numbers are down 40%. Think about that."</p>' +
-                  '<p><strong>Statement 5 (kaiman.blue, "Hey guys!" blog post):</strong></p>' +
-                  '<p>"Your favorite neighborhood hybrid has a home of their own now!" &mdash; Referring to their new website launched January 2026, which coincidentally was after the first FWA incident.</p>' +
+                  '<p><strong>Statement 1:</strong> "It was an accident. I was just trying to get to the sink."</p>' +
+                  '<p><strong>Statement 2:</strong> "These people are fake victims. This is a smear campaign because I went to Georgia Tech and they didn\'t."</p>' +
+                  '<p><strong>Statement 3:</strong> "The small of the back is a neutral zone. Like a handshake."</p>' +
+                  '<p><strong>Statement 4:</strong> "I\'m the real victim here. My Twitch numbers are down 40%."</p>' +
                   '<hr>' +
-                  '<p><em>All statements are public and preserved as evidence of the defendant\'s position.</em></p>'
+                  '<p><em>All statements are public record.</em></p>'
+        },
+        'georgia-tech-diploma': {
+            title: 'Exhibit G &mdash; Georgia Tech Diploma (Defendant\'s Exhibit)',
+            body: '<h4>GEORGIA INSTITUTE OF TECHNOLOGY</h4>' +
+                  '<p style="text-align:center;font-style:italic;">"The defendant has repeatedly invoked their Georgia Tech education to claim authority on anatomy and consent. This exhibit is presented for the record."</p>' +
+                  '<hr>' +
+                  '<div style="text-align:center;padding:24px;border:2px solid var(--accent-alt);font-family:\'Georgia\',serif;background:var(--bg-card-alt);">' +
+                  '<p style="font-size:0.8rem;color:var(--text-muted);">GEORGIA INSTITUTE OF TECHNOLOGY</p>' +
+                  '<h3 style="font-size:1.3rem;margin:8px 0;">Bachelor of Science</h3>' +
+                  '<p style="font-size:1rem;">in Computer Science</p>' +
+                  '<p style="font-size:0.85rem;margin:8px 0;">Concentration: Intelligence &amp; Media</p>' +
+                  '<hr style="width:200px;margin:16px auto;">' +
+                  '<p style="font-size:0.9rem;">Conferred upon <strong>Kaiman the Hybrid</strong></p>' +
+                  '<p style="font-size:0.75rem;color:var(--text-muted);margin-top:16px;">This diploma does not confer expertise in anatomy or consent law.</p>' +
+                  '</div>' +
+                  '<hr>' +
+                  '<p><em>The Meowfurshot Law Group notes that a CS degree does not qualify one to define which body parts require consent.</em></p>'
+        },
+        'consent-waiver': {
+            title: 'Exhibit H &mdash; Alleged "Consent Waiver"',
+            body: '<h4>ALLEGED CONSENT WAIVER &mdash; EXHIBIT H</h4>' +
+                  '<p>Retrieved from Kaiman\'s Telegram. The defendant allegedly circulated this document claiming it constituted a "binding consent agreement" for back-touching.</p>' +
+                  '<hr>' +
+                  '<div class="waiver-doc">' +
+                  '<div class="waiver-title">Small of the Back Consent Waiver</div>' +
+                  '<p>I, the undersigned, hereby acknowledge that the "small of the back" is a consensual zone, equivalent to a handshake or high-five. By entering a convention bathroom, I implicitly grant permission for friendly back-touching.</p>' +
+                  '<p style="margin-top:12px;">This waiver is valid for all future furry conventions and supersedes any prior discomfort.</p>' +
+                  '<div class="signature-line">X \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_</div>' +
+                  '<div class="signature-line" style="width:200px;">Date: \_\_\_\_/\_\_\_\_/2025</div>' +
+                  '<div class="stamp-red">REJECTED</div>' +
+                  '</div>' +
+                  '<hr>' +
+                  '<p><em>The court has ruled this document has no legal standing. The Meowfurshot Law Group categorically rejects the premise that the small of the back is a "handshake zone."</em></p>'
         }
     };
 
@@ -195,6 +340,16 @@
                 viewerTitle.innerHTML = data.title;
                 viewerBody.innerHTML = data.body;
                 viewer.style.display = 'block';
+
+                // Add court stamp
+                var existingStamp = viewer.querySelector('.court-stamp');
+                if (existingStamp) existingStamp.remove();
+                var stamp = document.createElement('div');
+                stamp.className = 'court-stamp';
+                stamp.textContent = 'EXHIBIT';
+                viewer.querySelector('.viewer-body').appendChild(stamp);
+                setTimeout(function () { if (stamp.parentNode) stamp.remove(); }, 2000);
+
                 viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
@@ -204,6 +359,44 @@
         viewerClose.addEventListener('click', function () {
             viewer.style.display = 'none';
         });
+    }
+
+    // --- Twitch Chat Parody ---
+    var chatContainer = document.getElementById('chat-parody');
+    if (chatContainer) {
+        var chatMessages = [
+            'KaimanTheHybrid: guys it was ONE TIME',
+            'FuzzyPaws42: BATHROOM TOUCHER',
+            'BloodDonor: i remember what you did',
+            'Protoprotogen: small of the back = not a handshake',
+            'GeorgiaTechGrad: this stream is wild',
+            'KaimanDefenseSquad: FREE KAIMAN',
+            'ScaleTail: \uD83D\uDC3E\uD83D\uDC3E\uD83D\uDC3E',
+            'BathroomSurvivor: i can\'t believe he\'s streaming rn',
+            'RandomViewer: who is kaiman',
+            'ChatMod: please keep chat on topic',
+            'KaimanTheHybrid: chat stop bringing up the incident',
+            'BackToucher666: SMALL OF THE BACK',
+            'BloodDonor: i have the screenshots kaiman',
+            'KaimanTheHybrid: these are fake victims btw',
+            'LawyerFur: this is exhibit A for the lawsuit',
+        ];
+        var chatIdx = 0;
+        function addChat() {
+            if (chatIdx >= chatMessages.length) chatIdx = 0;
+            var msg = document.createElement('div');
+            msg.className = 'chat-msg';
+            var colonIdx = chatMessages[chatIdx].indexOf(':');
+            var user = chatMessages[chatIdx].substring(0, colonIdx);
+            var text = chatMessages[chatIdx].substring(colonIdx + 1);
+            msg.innerHTML = '<span class="chat-user">' + user + ':</span><span class="chat-text">' + text + '</span>';
+            chatContainer.appendChild(msg);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            chatIdx++;
+        }
+        // Seed initial messages
+        for (var i = 0; i < 6; i++) addChat();
+        setInterval(addChat, 3000);
     }
 
     function escapeHtml(str) {

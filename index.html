@@ -8,6 +8,36 @@
 </head>
 <body>
 
+<div class="watermark">
+    <svg viewBox="0 0 200 200" fill="currentColor">
+        <path d="M30 60 Q50 30 80 50 Q70 70 50 80 Q30 70 30 60Z" />
+        <path d="M90 40 Q110 10 140 30 Q130 50 110 60 Q90 50 90 40Z" />
+        <path d="M150 70 Q170 40 190 60 Q180 80 160 90 Q150 80 150 70Z" />
+        <path d="M20 130 Q40 100 60 120 Q50 140 30 150 Q20 140 20 130Z" />
+        <path d="M80 150 Q100 120 120 140 Q110 160 90 170 Q80 160 80 150Z" />
+        <path d="M140 130 Q160 100 180 120 Q170 140 150 150 Q140 140 140 130Z" />
+    </svg>
+</div>
+
+<div id="gavel-overlay" class="gavel-overlay">
+    <div style="text-align:center;">
+        <div class="gavel-anim">&#9878;</div>
+        <div class="gavel-text">Order in the Court</div>
+    </div>
+</div>
+
+<div class="news-ticker">
+    <span class="news-ticker-label">&#9878; BREAKING</span>
+    <div class="news-ticker-content">
+        <span>Kaiman claims the small of the back is a "consensual zone" — Meowfurshot Law Group disagrees</span>
+        <span>BloodDonor comes forward as Victim A in the Kaiman Investigation</span>
+        <span>Kaiman's Georgia Tech degree does not cover anatomy, experts confirm</span>
+        <span>"Fake victims" says Kaiman — 5 victims have now come forward</span>
+        <span>Kaiman spotted at MegaPlex — attendees on high alert</span>
+        <span>Twitch streamer denies everything, streams still going</span>
+    </div>
+</div>
+
 <header class="site-header">
     <div class="header-badge">UNDER INVESTIGATION</div>
     <button id="theme-toggle" class="theme-toggle">&#9774; Dark</button>
@@ -23,6 +53,8 @@
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="testimonials.html">Victim Testimonials</a></li>
             <li><a href="evidence.html">Case Evidence</a></li>
+            <li><a href="anatomical-guide.html">Anatomy Guide</a></li>
+            <li><a href="merch.html">Merch</a></li>
         </ul>
     </div>
 </nav>
@@ -63,6 +95,35 @@
             <div class="card">
                 <p><strong>ALLEGATIONS:</strong> Non-consensual touching of the small of friends' backs in bathroom settings across multiple furry conventions (FWA, Midwest FurFest, MegaPlex), causing emotional trauma to multiple victims — including one identified as <strong>BloodDonor</strong>.</p>
                 <p><strong>STATUS:</strong> Investigation Underway &mdash; Kaiman Could Be Named in a Lawsuit</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="home-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+                <div class="card subpoena-status">
+                    <h3>&#9878; Subpoena Status</h3>
+                    <div class="status-bar-track">
+                        <div class="status-bar-fill" id="status-fill"></div>
+                    </div>
+                    <div class="status-labels">
+                        <span>Complaint Drafted</span>
+                        <span>Evidence Gathered</span>
+                        <span>Papers Drawn Up</span>
+                        <span>Server Dispatched</span>
+                        <span>Served</span>
+                    </div>
+                    <p class="status-text" id="status-text">Processing...</p>
+                </div>
+                <div class="card likelihood-meter">
+                    <h3>&#128202; Likelihood Kaiman Gets Sued</h3>
+                    <div class="likelihood-display" id="likelihood-display">0%</div>
+                    <p class="likelihood-label" id="likelihood-label">Calculating...</p>
+                    <div class="likelihood-bar">
+                        <div class="likelihood-bar-fill" id="likelihood-fill"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -110,9 +171,50 @@
         </div>
     </section>
 
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Where's Kaiman?</h2>
+            <div class="card kaiman-alert">
+                <h3>&#128204; Convention Tracker</h3>
+                <p class="subtitle">Keep track of Kaiman's convention appearances. Stay alert. Stay safe.</p>
+                <div class="kaiman-tracker-grid">
+                    <div class="tracker-card">
+                        <div class="convention-name">FWA 2025</div>
+                        <div class="convention-date">January 2025 &mdash; Florida</div>
+                        <div class="convention-status status-passed">&#10003; Attended (Incident Reported)</div>
+                    </div>
+                    <div class="tracker-card">
+                        <div class="convention-name">Midwest FurFest 2025</div>
+                        <div class="convention-date">December 2025 &mdash; Chicago</div>
+                        <div class="convention-status status-passed">&#10003; Attended (Incident Reported)</div>
+                    </div>
+                    <div class="tracker-card">
+                        <div class="convention-name">MegaPlex 2026</div>
+                        <div class="convention-date">Early 2026 &mdash; Florida</div>
+                        <div class="convention-status status-passed">&#10003; Attended (Incident Reported)</div>
+                    </div>
+                    <div class="tracker-card">
+                        <div class="convention-name">Next Unknown Convention</div>
+                        <div class="convention-date">TBD</div>
+                        <div class="convention-status status-upcoming">&#9888; Kaiman May Attend</div>
+                    </div>
+                </div>
+                <div class="alert-signup">
+                    <p style="margin-bottom:8px;font-size:0.85rem;color:var(--text-secondary);"><strong>Kaiman Alert:</strong> Get notified if Kaiman registers for a convention near you.</p>
+                    <form id="alert-form">
+                        <div class="form-group" style="display:flex;gap:8px;">
+                            <input type="email" placeholder="Enter your email for Kaiman Alerts" required>
+                            <button type="submit">Notify Me</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="statement section">
         <div class="container">
-            <h2 class="section-title">The Defendant's Response</h2>
+            <h2 class="section-title">The Subject's Response</h2>
             <div class="card card-red">
                 <p class="statement-quote">"These are fake victims. I never touched anyone. The small of the back is not even a real body part. This is a smear campaign by jealous furries who didn't get into Georgia Tech."</p>
                 <p class="statement-attribution">&mdash; Kaiman, via Telegram, April 2026</p>
