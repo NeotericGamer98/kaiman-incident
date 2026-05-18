@@ -653,6 +653,19 @@ a:hover {
     line-height: 1.8;
 }
 
+.viewer-body h4 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.viewer-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+}
+
 .viewer-body p {
     margin-bottom: 12px;
 }
@@ -697,7 +710,10 @@ a:hover {
 
 .kaiman-gallery img {
     width: 100%;
+    max-width: 400px;
     height: auto;
+    max-height: 500px;
+    object-fit: contain;
     border: 2px solid var(--accent-alt);
 }
 

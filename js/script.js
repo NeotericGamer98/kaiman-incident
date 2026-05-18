@@ -88,12 +88,8 @@
 
             var badge = document.querySelector('.badge');
             if (badge) {
-                var countEls = document.querySelectorAll('.comment');
-                var match = badge.textContent.match(/\d+/);
-                if (match) {
-                    var newCount = parseInt(match[0], 10) + 1;
-                    badge.textContent = newCount + ' Comments';
-                }
+                var totalComments = document.querySelectorAll('.comment').length;
+                badge.textContent = totalComments + ' Comments';
             }
         });
     }
