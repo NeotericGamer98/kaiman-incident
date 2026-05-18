@@ -222,4 +222,20 @@
         return div.innerHTML;
     }
 
+    // --- Scroll-triggered slide-in for testimonials ---
+    var testimonials = document.querySelectorAll('.testimonial');
+    if ('IntersectionObserver' in window && testimonials.length) {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        testimonials.forEach(function (t) { observer.observe(t); });
+    } else {
+        testimonials.forEach(function (t) { t.classList.add('visible'); });
+    }
+
 })();
