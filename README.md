@@ -4,7 +4,7 @@ A parody website styled as a class action lawsuit portal, built around the insid
 
 ## About
 
-This is a humorous/satirical website themed as a law firm ("The CrocWolf Law Group, P.A.") pursuing a class action lawsuit regarding fictional bathroom incidents at furry conventions. The site is structured like a real legal case portal, complete with:
+This is a humorous/satirical website themed as a law firm ("Meowfurshot Law Group") investigating a potential lawsuit regarding fictional bathroom incidents at furry conventions. The site is structured like a real legal case portal, complete with:
 
 - Case overview and timeline
 - Victim impact statements
