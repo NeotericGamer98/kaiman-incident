@@ -1,9 +1,41 @@
-/* ==============================================
-   The CrocWolf Law Group - Class Action Theme
-   In re: The Kaiman Incident
-   ============================================== */
+:root {
+    --bg-body: #f4f1ea;
+    --bg-card: #fff;
+    --bg-card-alt: #faf8f4;
+    --bg-nav: #faf8f4;
+    --bg-page-header: #faf8f4;
+    --bg-comments: #faf8f4;
+    --text-primary: #2c2c2c;
+    --text-secondary: #666;
+    --text-muted: #888;
+    --text-light: #999;
+    --text-nav: #4a4a4a;
+    --border: #d4cdbc;
+    --border-comment: #e8e4d8;
+    --border-card: #d4cdbc;
+    --form-bg: #faf8f4;
+    --form-bg-focus: #fff;
+}
 
-/* --- Reset & Base --- */
+[data-theme="dark"] {
+    --bg-body: #111318;
+    --bg-card: #1a1d25;
+    --bg-card-alt: #1e2129;
+    --bg-nav: #15181f;
+    --bg-page-header: #15181f;
+    --bg-comments: #13161c;
+    --text-primary: #d4d0c8;
+    --text-secondary: #999;
+    --text-muted: #777;
+    --text-light: #666;
+    --text-nav: #b0a898;
+    --border: #2a2d35;
+    --border-comment: #282b33;
+    --border-card: #2a2d35;
+    --form-bg: #1a1d25;
+    --form-bg-focus: #22252d;
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -12,9 +44,10 @@
 
 body {
     font-family: 'Georgia', 'Times New Roman', Times, serif;
-    background: #f4f1ea;
-    color: #2c2c2c;
+    background: var(--bg-body);
+    color: var(--text-primary);
     line-height: 1.7;
+    transition: background 0.3s, color 0.3s;
 }
 
 .container {
@@ -24,20 +57,22 @@ body {
 }
 
 a {
-    color: #1a3c6e;
+    color: var(--accent);
     text-decoration: none;
 }
 a:hover {
     text-decoration: underline;
 }
 
-/* --- Header --- */
+:root { --accent: #1a3c6e; --accent-alt: #c9a84c; }
+[data-theme="dark"] { --accent: #6b9fd4; --accent-alt: #d4b85c; }
+
 .site-header {
     background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 100%);
     color: #e8d5a3;
     padding: 32px 0 24px;
     text-align: center;
-    border-bottom: 4px solid #c9a84c;
+    border-bottom: 4px solid var(--accent-alt);
     position: relative;
 }
 
@@ -45,7 +80,7 @@ a:hover {
     position: absolute;
     top: 16px;
     right: 24px;
-    background: #c9a84c;
+    background: var(--accent-alt);
     color: #0a1628;
     font-family: 'Arial', sans-serif;
     font-weight: bold;
@@ -53,6 +88,26 @@ a:hover {
     letter-spacing: 2px;
     padding: 4px 12px;
     border-radius: 2px;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    background: transparent;
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-size: 16px;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    line-height: 1;
+    font-family: 'Arial', sans-serif;
+    transition: background 0.2s;
+}
+
+.theme-toggle:hover {
+    background: rgba(201, 168, 76, 0.2);
 }
 
 .firm-name {
@@ -69,13 +124,13 @@ a:hover {
     letter-spacing: 1px;
 }
 
-/* --- Navigation --- */
 .main-nav {
-    background: #faf8f4;
-    border-bottom: 1px solid #d4cdbc;
+    background: var(--bg-nav);
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .main-nav ul {
@@ -96,7 +151,7 @@ a:hover {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: #4a4a4a;
+    color: var(--text-nav);
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
 }
@@ -104,15 +159,14 @@ a:hover {
 .main-nav a:hover,
 .main-nav a.active {
     text-decoration: none;
-    border-bottom-color: #c9a84c;
-    color: #1a3c6e;
+    border-bottom-color: var(--accent-alt);
+    color: var(--accent);
 }
 
 .main-nav a.active {
     font-weight: bold;
 }
 
-/* --- Hero --- */
 .hero {
     background: linear-gradient(135deg, #1a2a4a 0%, #2c4060 100%);
     color: #f4f1ea;
@@ -123,7 +177,7 @@ a:hover {
 .case-number {
     font-family: 'Courier New', monospace;
     font-size: 0.85rem;
-    color: #c9a84c;
+    color: var(--accent-alt);
     letter-spacing: 1px;
 }
 
@@ -149,7 +203,6 @@ a:hover {
     flex-wrap: wrap;
 }
 
-/* --- Buttons --- */
 .btn {
     display: inline-block;
     padding: 12px 28px;
@@ -168,9 +221,9 @@ a:hover {
 }
 
 .btn-primary {
-    background: #c9a84c;
+    background: var(--accent-alt);
     color: #0a1628;
-    border-color: #c9a84c;
+    border-color: var(--accent-alt);
 }
 
 .btn-primary:hover {
@@ -181,15 +234,14 @@ a:hover {
 .btn-secondary {
     background: transparent;
     color: #f4f1ea;
-    border-color: #c9a84c;
+    border-color: var(--accent-alt);
 }
 
 .btn-secondary:hover {
-    background: #c9a84c;
+    background: var(--accent-alt);
     color: #0a1628;
 }
 
-/* --- Sections --- */
 .section {
     padding: 48px 0;
 }
@@ -197,36 +249,37 @@ a:hover {
 .section-title {
     font-size: 1.6rem;
     letter-spacing: 2px;
-    color: #1a3c6e;
-    border-bottom: 2px solid #c9a84c;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent-alt);
     padding-bottom: 8px;
     margin-bottom: 28px;
     text-transform: uppercase;
+    transition: color 0.3s;
 }
 
 .subtitle {
     font-size: 1rem;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 32px;
 }
 
-/* --- Cards --- */
 .card {
-    background: #fff;
-    border: 1px solid #d4cdbc;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
     padding: 24px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .card-gold {
-    border-left: 4px solid #c9a84c;
-    background: linear-gradient(135deg, #fdf8ee, #fff);
+    border-left: 4px solid var(--accent-alt);
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), var(--bg-card));
 }
 
 .card-red {
     border-left: 4px solid #b22222;
-    background: linear-gradient(135deg, #fef6f6, #fff);
+    background: linear-gradient(135deg, rgba(178,34,34,0.04), var(--bg-card));
 }
 
 .card p {
@@ -245,7 +298,6 @@ a:hover {
     margin-bottom: 6px;
 }
 
-/* --- Timeline --- */
 .timeline-list {
     position: relative;
     padding-left: 32px;
@@ -258,7 +310,7 @@ a:hover {
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #c9a84c;
+    background: var(--accent-alt);
 }
 
 .timeline-item {
@@ -274,15 +326,15 @@ a:hover {
     top: 6px;
     width: 12px;
     height: 12px;
-    background: #c9a84c;
-    border: 2px solid #c9a84c;
+    background: var(--accent-alt);
+    border: 2px solid var(--accent-alt);
     border-radius: 50%;
 }
 
 .timeline-date {
     font-family: 'Courier New', monospace;
     font-size: 0.8rem;
-    color: #c9a84c;
+    color: var(--accent-alt);
     font-weight: bold;
     letter-spacing: 1px;
     margin-bottom: 4px;
@@ -290,15 +342,14 @@ a:hover {
 
 .timeline-content h3 {
     font-size: 1.1rem;
-    color: #1a3c6e;
+    color: var(--accent);
     margin-bottom: 6px;
 }
 
-/* --- Statement block --- */
 .statement-quote {
     font-style: italic;
     font-size: 1.1rem;
-    color: #8b0000;
+    color: #b22222;
     padding: 8px 16px;
     border-left: 3px solid #b22222;
     margin-bottom: 8px !important;
@@ -307,16 +358,64 @@ a:hover {
 .statement-attribution {
     text-align: right;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .note {
     font-size: 0.85rem;
-    color: #888;
+    color: var(--text-muted);
     font-style: italic;
 }
 
-/* --- Testimonials --- */
+.defendant-card {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.defendant-photo {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border: 2px solid var(--accent-alt);
+    flex-shrink: 0;
+}
+
+.defendant-photo-sm {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid var(--accent-alt);
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.defendant-details {
+    flex: 1;
+}
+
+.defendant-details h3 {
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+.defendant-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.defendant-details ul li {
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+
+.defendant-details ul li strong {
+    display: inline-block;
+    min-width: 120px;
+    color: var(--text-secondary);
+}
+
 .testimonial {
     padding: 28px;
 }
@@ -332,14 +431,14 @@ a:hover {
 
 .victim-label {
     font-weight: bold;
-    color: #1a3c6e;
+    color: var(--accent);
     font-size: 1.1rem;
     letter-spacing: 1px;
 }
 
 .victim-convention {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-light);
     font-family: 'Arial', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -356,9 +455,9 @@ a:hover {
     justify-content: space-between;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border);
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .testimonial-impact {
@@ -366,7 +465,6 @@ a:hover {
     font-weight: bold;
 }
 
-/* --- Forms --- */
 .testimonial-form,
 .comment-form {
     max-width: 600px;
@@ -382,46 +480,49 @@ a:hover {
     font-weight: bold;
     margin-bottom: 4px;
     font-size: 0.9rem;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #d4cdbc;
+    border: 1px solid var(--border);
     font-family: 'Georgia', serif;
     font-size: 0.95rem;
-    background: #faf8f4;
+    background: var(--form-bg);
+    color: var(--text-primary);
     border-radius: 2px;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #c9a84c;
-    background: #fff;
+    border-color: var(--accent-alt);
+    background: var(--form-bg-focus);
 }
 
 .form-note {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-muted);
     margin-top: 8px;
     text-align: center;
 }
 
-/* --- Comments --- */
 .comments-section {
-    background: #faf8f4;
-    border-top: 1px solid #d4cdbc;
+    background: var(--bg-comments);
+    border-top: 1px solid var(--border);
+    transition: background 0.3s;
 }
 
 .comment {
-    background: #fff;
+    background: var(--bg-card-alt);
     padding: 16px 20px;
     margin-bottom: 12px;
-    border: 1px solid #e8e4d8;
+    border: 1px solid var(--border-comment);
     border-radius: 2px;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .comment-header {
@@ -433,11 +534,11 @@ a:hover {
 
 .comment-author {
     font-weight: bold;
-    color: #1a3c6e;
+    color: var(--accent);
 }
 
 .comment-date {
-    color: #999;
+    color: var(--text-light);
     font-size: 0.8rem;
 }
 
@@ -447,7 +548,7 @@ a:hover {
 
 .badge {
     display: inline-block;
-    background: #c9a84c;
+    background: var(--accent-alt);
     color: #0a1628;
     font-size: 0.75rem;
     padding: 2px 10px;
@@ -460,15 +561,14 @@ a:hover {
 .comment-form-wrap {
     margin-top: 32px;
     padding-top: 24px;
-    border-top: 1px solid #d4cdbc;
+    border-top: 1px solid var(--border);
 }
 
 .comment-form-wrap h3 {
     margin-bottom: 16px;
-    color: #1a3c6e;
+    color: var(--accent);
 }
 
-/* --- Evidence --- */
 .evidence-item {
     display: flex;
     gap: 16px;
@@ -487,13 +587,13 @@ a:hover {
 
 .evidence-content h3 {
     font-size: 1.1rem;
-    color: #1a3c6e;
+    color: var(--accent);
     margin-bottom: 4px;
 }
 
 .evidence-meta {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-muted);
     margin-bottom: 8px;
     font-family: 'Courier New', monospace;
 }
@@ -505,22 +605,21 @@ a:hover {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #1a3c6e;
-    border: 1px solid #1a3c6e;
+    color: var(--accent);
+    border: 1px solid var(--accent);
     padding: 6px 16px;
     transition: all 0.2s;
 }
 
 .btn-download:hover {
-    background: #1a3c6e;
+    background: var(--accent);
     color: #fff;
     text-decoration: none;
 }
 
-/* --- Evidence Viewer --- */
 .evidence-viewer {
     margin-top: 24px;
-    border: 2px solid #c9a84c;
+    border: 2px solid var(--accent-alt);
 }
 
 .viewer-header {
@@ -529,11 +628,11 @@ a:hover {
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #d4cdbc;
+    border-bottom: 1px solid var(--border);
 }
 
 .viewer-header h3 {
-    color: #1a3c6e;
+    color: var(--accent);
 }
 
 .btn-close {
@@ -541,7 +640,7 @@ a:hover {
     border: none;
     font-size: 1.8rem;
     cursor: pointer;
-    color: #888;
+    color: var(--text-muted);
     line-height: 1;
 }
 
@@ -558,7 +657,6 @@ a:hover {
     margin-bottom: 12px;
 }
 
-/* --- Findings Grid --- */
 .findings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -575,14 +673,13 @@ a:hover {
     font-size: 0.9rem;
 }
 
-/* --- CTA --- */
 .cta .card-gold {
     text-align: center;
     padding: 36px;
 }
 
 .cta h2 {
-    color: #1a3c6e;
+    color: var(--accent);
     margin-bottom: 12px;
 }
 
@@ -591,13 +688,25 @@ a:hover {
     font-size: 1rem;
 }
 
-/* --- Footer --- */
+.kaiman-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.kaiman-gallery img {
+    width: 100%;
+    height: auto;
+    border: 2px solid var(--accent-alt);
+}
+
 .site-footer {
     background: #0a1628;
     color: #666;
     text-align: center;
     padding: 32px 0;
-    border-top: 4px solid #c9a84c;
+    border-top: 4px solid var(--accent-alt);
 }
 
 .footer-disclaimer {
@@ -614,21 +723,20 @@ a:hover {
     letter-spacing: 1px;
 }
 
-/* --- Page Header --- */
 .page-header {
-    background: #faf8f4;
-    border-bottom: 1px solid #d4cdbc;
+    background: var(--bg-page-header);
+    border-bottom: 1px solid var(--border);
     padding: 40px 0 !important;
+    transition: background 0.3s;
 }
 
 .page-header h2 {
     font-size: 2rem;
-    color: #1a3c6e;
+    color: var(--accent);
     letter-spacing: 2px;
     margin-bottom: 8px;
 }
 
-/* --- Responsive --- */
 @media (max-width: 768px) {
     .firm-name {
         font-size: 1.4rem;
@@ -658,5 +766,22 @@ a:hover {
         position: static;
         display: inline-block;
         margin-bottom: 12px;
+    }
+
+    .theme-toggle {
+        position: static;
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+
+    .defendant-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .defendant-details ul li strong {
+        min-width: auto;
+        display: block;
     }
 }
