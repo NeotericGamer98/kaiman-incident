@@ -836,27 +836,50 @@ a:hover {
     font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-/* --- Kaiman Gallery --- */
+/* --- Image Galleries (W3Schools-style) --- */
 .kaiman-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
     margin-top: 16px;
+}
+
+.kaiman-gallery .gallery-item {
+    border: 1px solid var(--border-card);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    background: var(--bg-card-alt);
+}
+
+.kaiman-gallery .gallery-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: var(--accent-alt);
+}
+
+.kaiman-gallery .gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid var(--border);
+}
+
+.kaiman-gallery .gallery-item .gallery-desc {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
 }
 
 @media (min-width: 600px) {
     .kaiman-gallery {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
-}
-
-.kaiman-gallery img {
-    width: 100%;
-    max-width: 400px;
-    max-height: 500px;
-    object-fit: contain;
-    border: 2px solid var(--accent-alt);
-    margin: 0 auto; /* Center when alone in a single-column layout */
+    .kaiman-gallery .gallery-item img {
+        height: 220px;
+    }
 }
 
 /* --- Site Footer --- */
