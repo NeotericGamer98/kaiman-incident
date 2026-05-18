@@ -30,71 +30,6 @@
         }
     })();
 
-    // --- Gavel Animation on Load ---
-    (function gavelStrike() {
-        var gavel = document.getElementById('gavel-overlay');
-        if (!gavel) return;
-        var hasSeen = sessionStorage.getItem('kaiman-gavel');
-        if (hasSeen) return;
-        gavel.classList.add('active');
-        sessionStorage.setItem('kaiman-gavel', 'true');
-        setTimeout(function () {
-            gavel.classList.remove('active');
-        }, 1800);
-    })();
-
-    // --- Subpoena Status Progress ---
-    (function subpoenaProgress() {
-        var fill = document.getElementById('status-fill');
-        var labels = document.querySelectorAll('.status-labels span');
-        if (!fill || !labels.length) return;
-        var steps = [
-            { label: 'Complaint Drafted', pct: 20 },
-            { label: 'Evidence Gathered', pct: 40 },
-            { label: 'Papers Drawn Up', pct: 60 },
-            { label: 'Process Server Dispatched', pct: 80 },
-            { label: 'Served', pct: 100 }
-        ];
-        var current = 2; // index into steps — "Papers Drawn Up"
-        var pct = steps[current].pct;
-        var text = document.getElementById('status-text');
-        setTimeout(function () {
-            fill.style.width = pct + '%';
-            if (text) text.textContent = 'Current Status: ' + steps[current].label;
-            labels.forEach(function (s, i) {
-                if (i === current) s.classList.add('status-label-active');
-                else s.classList.remove('status-label-active');
-            });
-        }, 500);
-    })();
-
-    // --- Likelihood Meter ---
-    (function likelihoodMeter() {
-        var display = document.getElementById('likelihood-display');
-        var fill = document.getElementById('likelihood-fill');
-        if (!display || !fill) return;
-        var levels = [
-            { pct: 15, label: 'Very Unlikely', cls: 'low' },
-            { pct: 35, label: 'Unlikely', cls: 'low' },
-            { pct: 55, label: 'Possible', cls: 'medium' },
-            { pct: 75, label: 'Likely', cls: 'medium' },
-            { pct: 92, label: 'Very Likely', cls: 'high' },
-            { pct: 99, label: 'Kaiman is Toast', cls: 'high' }
-        ];
-        var idx = 0;
-        function update() {
-            var lv = levels[idx];
-            display.textContent = lv.pct + '%';
-            display.className = 'likelihood-display ' + lv.cls;
-            fill.style.width = lv.pct + '%';
-            fill.className = 'likelihood-bar-fill ' + lv.cls;
-            document.getElementById('likelihood-label').textContent = lv.label;
-            idx = (idx + 1) % levels.length;
-        }
-        update();
-        setInterval(update, 4000);
-    })();
-
     // --- Testimonial Form ---
     var testimonialForm = document.getElementById('testimonial-form');
     var formSuccess = document.getElementById('form-success');
@@ -127,12 +62,7 @@
                     '<span class="comment-author">' + escapeHtml(author) + '</span>' +
                     '<span class="comment-date">' + dateStr + '</span>' +
                 '</div>' +
-                '<p class="comment-body">' + escapeHtml(text) + '</p>' +
-                '<div class="reactions">' +
-                    '<button class="reaction-btn" data-reaction="paw">\uD83D\uDC3E <span class="reaction-count">0</span></button>' +
-                    '<button class="reaction-btn" data-reaction="fire">\uD83D\uDD25 <span class="reaction-count">0</span></button>' +
-                    '<button class="reaction-btn" data-reaction="poop">\uD83D\uDCA9 <span class="reaction-count">0</span></button>' +
-                '</div>';
+                '<p class="comment-body">' + escapeHtml(text) + '</p>';
             if (commentsContainer) {
                 commentsContainer.appendChild(commentDiv);
             } else {
@@ -143,71 +73,6 @@
             var badge = document.querySelector('.badge');
             if (badge) {
                 badge.textContent = document.querySelectorAll('.comment').length + ' Comments';
-            }
-        });
-    }
-
-    // --- Paw Print Reactions (delegated) ---
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('.reaction-btn');
-        if (!btn) return;
-        var countSpan = btn.querySelector('.reaction-count');
-        if (!countSpan) return;
-        var count = parseInt(countSpan.textContent, 10) || 0;
-        if (btn.classList.contains('active')) {
-            btn.classList.remove('active');
-            countSpan.textContent = Math.max(0, count - 1);
-        } else {
-            btn.classList.add('active');
-            countSpan.textContent = count + 1;
-        }
-    });
-
-    // --- Kaiman Alert Signup ---
-    var alertForm = document.getElementById('alert-form');
-    if (alertForm) {
-        alertForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var input = alertForm.querySelector('input');
-            if (input) input.value = '';
-            alertForm.innerHTML = '<p style="color:var(--accent);font-weight:bold;">\u2713 You\'re on the Kaiman Alert list. We\'ll notify you if Kaiman attends another con.</p>';
-        });
-    }
-
-    // --- Merch Add to Cart Parody ---
-    document.querySelectorAll('.btn-merch').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (this.classList.contains('sold-out')) return;
-            var orig = this.textContent;
-            this.textContent = '\u2713 Added!';
-            this.style.background = '#2ecc71';
-            this.style.color = '#fff';
-            var self = this;
-            setTimeout(function () {
-                self.textContent = orig;
-                self.style.background = '';
-                self.style.color = '';
-            }, 2000);
-        });
-    });
-
-    // --- Defense Fund Donate Parody ---
-    var donateBtn = document.getElementById('donate-btn');
-    if (donateBtn) {
-        donateBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            var fill = document.getElementById('fund-fill');
-            var total = document.getElementById('fund-total');
-            if (fill && total) {
-                var current = parseFloat(total.getAttribute('data-amount')) || 0;
-                var donated = parseFloat((Math.random() * 5).toFixed(2));
-                // Donations of $0.02, $1.50, etc — keep it absurdly low
-                var newTotal = current + donated;
-                total.textContent = '$' + newTotal.toFixed(2);
-                total.setAttribute('data-amount', newTotal.toFixed(2));
-                var pct = Math.min(100, (newTotal / 50000) * 100);
-                fill.style.width = pct + '%';
             }
         });
     }
@@ -340,16 +205,6 @@
                 viewerTitle.innerHTML = data.title;
                 viewerBody.innerHTML = data.body;
                 viewer.style.display = 'block';
-
-                // Add court stamp
-                var existingStamp = viewer.querySelector('.court-stamp');
-                if (existingStamp) existingStamp.remove();
-                var stamp = document.createElement('div');
-                stamp.className = 'court-stamp';
-                stamp.textContent = 'EXHIBIT';
-                viewer.querySelector('.viewer-body').appendChild(stamp);
-                setTimeout(function () { if (stamp.parentNode) stamp.remove(); }, 2000);
-
                 viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
@@ -359,44 +214,6 @@
         viewerClose.addEventListener('click', function () {
             viewer.style.display = 'none';
         });
-    }
-
-    // --- Twitch Chat Parody ---
-    var chatContainer = document.getElementById('chat-parody');
-    if (chatContainer) {
-        var chatMessages = [
-            'KaimanTheHybrid: guys it was ONE TIME',
-            'FuzzyPaws42: BATHROOM TOUCHER',
-            'BloodDonor: i remember what you did',
-            'Protoprotogen: small of the back = not a handshake',
-            'GeorgiaTechGrad: this stream is wild',
-            'KaimanDefenseSquad: FREE KAIMAN',
-            'ScaleTail: \uD83D\uDC3E\uD83D\uDC3E\uD83D\uDC3E',
-            'BathroomSurvivor: i can\'t believe he\'s streaming rn',
-            'RandomViewer: who is kaiman',
-            'ChatMod: please keep chat on topic',
-            'KaimanTheHybrid: chat stop bringing up the incident',
-            'BackToucher666: SMALL OF THE BACK',
-            'BloodDonor: i have the screenshots kaiman',
-            'KaimanTheHybrid: these are fake victims btw',
-            'LawyerFur: this is exhibit A for the lawsuit',
-        ];
-        var chatIdx = 0;
-        function addChat() {
-            if (chatIdx >= chatMessages.length) chatIdx = 0;
-            var msg = document.createElement('div');
-            msg.className = 'chat-msg';
-            var colonIdx = chatMessages[chatIdx].indexOf(':');
-            var user = chatMessages[chatIdx].substring(0, colonIdx);
-            var text = chatMessages[chatIdx].substring(colonIdx + 1);
-            msg.innerHTML = '<span class="chat-user">' + user + ':</span><span class="chat-text">' + text + '</span>';
-            chatContainer.appendChild(msg);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            chatIdx++;
-        }
-        // Seed initial messages
-        for (var i = 0; i < 6; i++) addChat();
-        setInterval(addChat, 3000);
     }
 
     function escapeHtml(str) {
