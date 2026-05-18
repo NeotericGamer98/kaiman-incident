@@ -80,10 +80,10 @@
     // --- Evidence Viewer ---
     var evidenceData = {
         'incident-report-01': {
-            title: 'Exhibit A &mdash; Incident Report (FWA)',
-            body: '<h4>INCIDENT REPORT &mdash; FWA 2025</h4>' +
+            title: 'Exhibit A &mdash; Incident Report (FC)',
+            body: '<h4>INCIDENT REPORT &mdash; FC 2025</h4>' +
                   '<p><strong>Date of Incident:</strong> January 2025</p>' +
-                  '<p><strong>Location:</strong> Men\'s Bathroom, Convention Center, Florida</p>' +
+                  '<p><strong>Location:</strong> Men\'s Bathroom, Convention Center, San Jose</p>' +
                   '<p><strong>Reporting Party:</strong> Victim A</p>' +
                   '<p><strong>Subject:</strong> Kaiman (Crocodile/Grey Wolf Hybrid)</p>' +
                   '<hr>' +
@@ -101,7 +101,7 @@
                   '<p><strong>Chat:</strong> "FurCon Drama (Private)"</p>' +
                   '<hr>' +
                   '<p><strong>[Kaiman]:</strong> can\'t believe people are still talking about this</p>' +
-                  '<p><strong>[Kaiman]:</strong> it was ONE TIME at FWA and it was an accident</p>' +
+                  '<p><strong>[Kaiman]:</strong> it was ONE TIME at FC and it was an accident</p>' +
                   '<p><strong>[BloodDonor]:</strong> you touched my back without asking dude</p>' +
                   '<p><strong>[Kaiman]:</strong> the small of the back is a consensual zone</p>' +
                   '<p><strong>[User926]:</strong> multiple people have come forward now though. MFF too</p>' +
@@ -120,8 +120,8 @@
                   '<p><strong>Statement 1 &mdash; MFF Security Volunteer "M."</strong></p>' +
                   '<p>"I was stationed near the bathroom entrance during Midwest FurFest 2025."</p>' +
                   '<hr>' +
-                  '<p><strong>Statement 2 &mdash; FWA Staff Member "J."</strong></p>' +
-                  '<p>"At FWA 2025, I overheard two attendees discussing an incident in the bathroom. The victim was named BloodDonor."</p>' +
+                  '<p><strong>Statement 2 &mdash; FC Staff Member "J."</strong></p>' +
+                  '<p>"At FC 2025, I overheard two attendees discussing an incident in the bathroom. The victim was named BloodDonor."</p>' +
                   '<hr>' +
                   '<p><strong>Statement 3 &mdash; Unaffiliated Third Party "T."</strong></p>' +
                   '<p>"I was in the stall next to them. Sounded like it was the small of the back specifically."</p>' +
@@ -135,7 +135,7 @@
                   '<p><strong>Date:</strong> April 2026</p>' +
                   '<hr>' +
                   '<h4>FINDINGS</h4>' +
-                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across three different conventions (FWA, MFF, MegaPlex).</p>' +
+                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across three different conventions (FC, MFF, MegaPlex).</p>' +
                   '<p><strong>2. Time of Day:</strong> All incidents occurred during peak convention hours (2PM&ndash;5PM).</p>' +
                   '<p><strong>3. Targeting Pattern:</strong> Victims were known associates, including "BloodDonor."</p>' +
                   '<p><strong>4. Body Part Specificity:</strong> The "small of the back" was the contact zone in every incident.</p>' +
