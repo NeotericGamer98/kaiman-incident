@@ -1,10 +1,10 @@
 # The Kaiman Incident — Class Action Parody Website
 
-A parody website styled as a class action lawsuit portal, built around the inside joke about **The Kaiman Incident**.
+A parody website set up like a class action lawsuit portal for the inside joke about **The Kaiman Incident**.
 
 ## About
 
-This is a humorous/satirical website themed as a law firm ("Meowfurshot Law Group") investigating a potential lawsuit regarding fictional bathroom incidents at furry conventions. The site is structured like a real legal case portal, complete with:
+A joke website that looks like a law firm ("Meowfurshot Law Group") investigating a fake lawsuit about fictional bathroom incidents at furry conventions. It's set up like a real legal case portal with:
 
 - Case overview and timeline
 - Victim impact statements
