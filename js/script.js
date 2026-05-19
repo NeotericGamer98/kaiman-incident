@@ -5,14 +5,19 @@
     var sbReady = initSupabase();
 
     // --- Auth Status Update for Nav ---
-    function updateAuthNav() {
-        var user = KA.currentUser();
+    async function updateAuthNav() {
+        var user = await KA.currentUser();
         var loginLink = document.getElementById('nav-login');
         var profileLink = document.getElementById('nav-profile');
         var configBtn = document.getElementById('nav-config');
         if (loginLink) {
             loginLink.textContent = user ? 'Log Out' : 'Log In';
-            loginLink.href = user ? 'javascript:KA.signOut()' : 'auth.html';
+            loginLink.href = user ? '#' : 'auth.html';
+            if (user) {
+                loginLink.onclick = function (e) { e.preventDefault(); KA.signOut(); };
+            } else {
+                loginLink.onclick = null;
+            }
         }
         if (profileLink) {
             profileLink.style.display = user ? 'inline' : 'none';
@@ -109,7 +114,7 @@
     if (testimonialForm) {
         testimonialForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            var user = KA.currentUser();
+            var user = await KA.currentUser();
             if (!user) {
                 alert('You must be logged in to submit a testimonial. Please log in or create an account.');
                 window.location.href = 'auth.html';
@@ -189,7 +194,7 @@
     if (commentForm) {
         commentForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            var user = KA.currentUser();
+            var user = await KA.currentUser();
             if (!user) {
                 alert('You must be logged in to comment. Please log in or create an account.');
                 window.location.href = 'auth.html';
@@ -235,7 +240,7 @@
     // --- Autofill ---
     if (document.getElementById('victim-name') || document.getElementById('comment-author')) {
         if (typeof KA !== 'undefined' && KA.applyAutofill) {
-            KA.applyAutofill();
+            KA.applyAutofill().catch(function () {});
         }
     }
 
@@ -485,6 +490,6 @@
     }
 
     // --- Update auth nav on page load ---
-    updateAuthNav();
+    updateAuthNav().catch(function () {});
 
 })();

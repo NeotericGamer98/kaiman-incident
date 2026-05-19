@@ -140,7 +140,7 @@
     var logoutBtn = document.getElementById('profile-logout');
 
     async function loadProfile() {
-        var user = KA.currentUser();
+        var user = await KA.currentUser();
         if (!user) {
             notLoggedIn.style.display = 'block';
             return;
