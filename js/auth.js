@@ -7,8 +7,8 @@
     var sb = getSupabase();
     if (!sb) return null;
     try {
-      var { data } = await sb.auth.getSession();
-      return data && data.session ? data.session.user : null;
+      var { data } = await sb.auth.getUser();
+      return data ? data.user : null;
     } catch (e) {
       return null;
     }

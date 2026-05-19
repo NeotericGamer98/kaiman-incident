@@ -8,7 +8,13 @@ function initSupabase(url, key) {
   SUPABASE_ANON_KEY = key || localStorage.getItem('supabase-key') || SUPABASE_ANON_KEY;
 
   if (SUPABASE_URL && SUPABASE_ANON_KEY && typeof supabase !== 'undefined') {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: false
+      }
+    });
     return true;
   }
   return false;
