@@ -836,7 +836,7 @@ a:hover {
     font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
-/* --- Image Galleries (W3Schools-style) --- */
+/* --- Image Galleries --- */
 .kaiman-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -848,7 +848,7 @@ a:hover {
     border: 1px solid var(--border-card);
     border-radius: 2px;
     overflow: hidden;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s, border-color 0.3s;
     background: var(--bg-card-alt);
 }
 
@@ -859,13 +859,16 @@ a:hover {
 
 .kaiman-gallery .gallery-item img {
     width: 100%;
-    height: auto;
-    max-height: 500px;
+    height: 300px;
     object-fit: contain;
     display: block;
     cursor: pointer;
-    border-bottom: 1px solid var(--border);
     background: #000;
+    transition: opacity 0.2s;
+}
+
+.kaiman-gallery .gallery-item img:hover {
+    opacity: 0.85;
 }
 
 .kaiman-gallery .gallery-item .gallery-desc {
@@ -880,9 +883,31 @@ a:hover {
     .kaiman-gallery {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
-    .kaiman-gallery .gallery-item img {
-        max-height: 600px;
-    }
+}
+
+/* Discord gallery: vertical stack, full-width, uncropped */
+.discord-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.discord-gallery .gallery-item {
+    overflow: visible;
+    border: none;
+    background: none;
+}
+
+.discord-gallery .gallery-item:hover {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.discord-gallery .gallery-item img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border-card);
+    background: #000;
 }
 
 /* --- Lightbox --- */
