@@ -1,6 +1,244 @@
 (function () {
     'use strict';
 
+    // --- Supabase Initialization ---
+    var sbReady = initSupabase();
+
+    // --- Auth Status Update for Nav ---
+    function updateAuthNav() {
+        var user = KA.currentUser();
+        var loginLink = document.getElementById('nav-login');
+        var profileLink = document.getElementById('nav-profile');
+        var configBtn = document.getElementById('nav-config');
+        if (loginLink) {
+            loginLink.textContent = user ? 'Log Out' : 'Log In';
+            loginLink.href = user ? 'javascript:KA.signOut()' : 'auth.html';
+        }
+        if (profileLink) {
+            profileLink.style.display = user ? 'inline' : 'none';
+        }
+        if (configBtn) {
+            configBtn.style.display = sbReady ? 'none' : 'inline';
+        }
+    }
+
+    // --- Supabase Config Modal ---
+    var configModal = document.getElementById('supabase-config-modal');
+    var configBtn = document.getElementById('nav-config');
+    var configForm = document.getElementById('supabase-config-form');
+    var configUrl = document.getElementById('supabase-url');
+    var configKey = document.getElementById('supabase-key');
+    var configCancel = document.getElementById('supabase-config-cancel');
+
+    if (configBtn) {
+        configBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (configModal) {
+                var cfg = KA.getConfig();
+                configUrl.value = cfg.url;
+                configKey.value = cfg.key;
+                configModal.style.display = 'flex';
+            }
+        });
+    }
+
+    if (configCancel && configModal) {
+        configCancel.addEventListener('click', function () {
+            configModal.style.display = 'none';
+        });
+        configModal.addEventListener('click', function (e) {
+            if (e.target === configModal) configModal.style.display = 'none';
+        });
+    }
+
+    if (configForm) {
+        configForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var url = configUrl.value.trim();
+            var key = configKey.value.trim();
+            if (url && key) {
+                KA.saveConfig(url, key);
+                sbReady = initSupabase();
+                configModal.style.display = 'none';
+                updateAuthNav();
+                window.location.reload();
+            }
+        });
+    }
+
+    // --- Load Testimonials from Supabase ---
+    var testimonialsContainer = document.getElementById('testimonials-container');
+
+    async function loadTestimonials() {
+        if (!testimonialsContainer) return;
+        var sb = getSupabase();
+        if (!sb) return;
+        var { data, error } = await sb
+            .from('testimonials')
+            .select('*')
+            .order('created_at', { ascending: false });
+        if (error || !data || data.length === 0) return;
+        data.forEach(function (t) {
+            var article = document.createElement('article');
+            var isSevere = t.impact_level === 'Severe';
+            article.className = 'testimonial card' + (isSevere ? ' card-red' : '');
+            var dateStr = new Date(t.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            article.innerHTML =
+                '<div class="testimonial-header">' +
+                    '<span class="victim-label">' + escapeHtml(t.author_name) + '</span>' +
+                    '<span class="victim-convention">' + escapeHtml(t.convention) + '</span>' +
+                '</div>' +
+                '<p class="testimonial-body">"' + escapeHtml(t.story) + '"</p>' +
+                '<div class="testimonial-footer">' +
+                    '<span class="testimonial-date">Filed: ' + dateStr + '</span>' +
+                    (t.impact_level ? '<span class="testimonial-impact">Impact Level: ' + escapeHtml(t.impact_level) + '</span>' : '') +
+                '</div>';
+            testimonialsContainer.appendChild(article);
+        });
+    }
+
+    loadTestimonials();
+
+    // --- Testimonial Form ---
+    var testimonialForm = document.getElementById('testimonial-form');
+    var formSuccess = document.getElementById('form-success');
+    var submitBtn = document.getElementById('testimonial-submit');
+
+    if (testimonialForm) {
+        testimonialForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var user = KA.currentUser();
+            if (!user) {
+                alert('You must be logged in to submit a testimonial. Please log in or create an account.');
+                window.location.href = 'auth.html';
+                return;
+            }
+            var name = document.getElementById('victim-name').value.trim();
+            var convention = document.getElementById('victim-convention').value.trim();
+            var story = document.getElementById('victim-story').value.trim();
+            var impact = document.getElementById('victim-impact').value;
+            if (!name || !convention || !story) return;
+            if (submitBtn) submitBtn.disabled = true;
+            var sb = getSupabase();
+            if (sb) {
+                await sb.from('testimonials').insert({
+                    author_name: name,
+                    convention: convention,
+                    story: story,
+                    impact_level: impact || 'Moderate',
+                    user_id: user.id
+                });
+            }
+            testimonialForm.reset();
+            testimonialForm.style.display = 'none';
+            if (formSuccess) formSuccess.style.display = 'block';
+            if (submitBtn) submitBtn.disabled = false;
+        });
+    }
+
+    // --- Load Comments from Supabase ---
+    var commentsContainer = document.getElementById('comments-container');
+    var commentBadge = document.querySelector('.badge');
+
+    async function loadComments() {
+        if (!commentsContainer) return;
+        var sb = getSupabase();
+        if (!sb) {
+            showStaticComments();
+            return;
+        }
+        var { data, error } = await sb
+            .from('comments')
+            .select('*')
+            .order('created_at', { ascending: false });
+        if (error || !data || data.length === 0) {
+            showStaticComments();
+            return;
+        }
+        commentsContainer.innerHTML = '';
+        data.forEach(function (c) {
+            var div = document.createElement('div');
+            div.className = 'comment';
+            var dateStr = new Date(c.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            div.innerHTML =
+                '<div class="comment-header">' +
+                    '<span class="comment-author">' + escapeHtml(c.author_name) + '</span>' +
+                    '<span class="comment-date">' + dateStr + '</span>' +
+                '</div>' +
+                '<p class="comment-body">' + escapeHtml(c.text) + '</p>';
+            commentsContainer.appendChild(div);
+        });
+        if (commentBadge) {
+            commentBadge.textContent = data.length + ' Comments';
+        }
+    }
+
+    function showStaticComments() {
+        var existing = commentsContainer ? commentsContainer.querySelectorAll('.comment') : [];
+        if (existing.length > 0) return;
+    }
+
+    loadComments();
+
+    // --- Comment Form ---
+    var commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var user = KA.currentUser();
+            if (!user) {
+                alert('You must be logged in to comment. Please log in or create an account.');
+                window.location.href = 'auth.html';
+                return;
+            }
+            var author = document.getElementById('comment-author').value.trim();
+            var text = document.getElementById('comment-text').value.trim();
+            if (!author || !text) return;
+            var today = new Date();
+            var dateStr = today.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            var sb = getSupabase();
+            if (sb) {
+                await sb.from('comments').insert({
+                    author_name: author,
+                    text: text,
+                    user_id: user.id
+                });
+            }
+            var commentDiv = document.createElement('div');
+            commentDiv.className = 'comment';
+            commentDiv.innerHTML =
+                '<div class="comment-header">' +
+                    '<span class="comment-author">' + escapeHtml(author) + '</span>' +
+                    '<span class="comment-date">' + dateStr + '</span>' +
+                '</div>' +
+                '<p class="comment-body">' + escapeHtml(text) + '</p>';
+            if (commentsContainer) {
+                commentsContainer.insertBefore(commentDiv, commentsContainer.firstChild);
+            } else {
+                var wrap = document.querySelector('.comment-form-wrap');
+                if (wrap) wrap.parentNode.insertBefore(commentDiv, wrap);
+            }
+            commentForm.reset();
+            var badge = document.querySelector('.badge');
+            if (badge) {
+                badge.textContent = document.querySelectorAll('.comment').length + ' Comments';
+            }
+        });
+    }
+
+    // --- Autofill ---
+    if (document.getElementById('victim-name') || document.getElementById('comment-author')) {
+        if (typeof KA !== 'undefined' && KA.applyAutofill) {
+            KA.applyAutofill();
+        }
+    }
+
     // --- Dark Mode Toggle ---
     (function initTheme() {
         var saved = localStorage.getItem('kaiman-theme');
@@ -29,53 +267,6 @@
             }
         }
     })();
-
-    // --- Testimonial Form ---
-    var testimonialForm = document.getElementById('testimonial-form');
-    var formSuccess = document.getElementById('form-success');
-    if (testimonialForm) {
-        testimonialForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            testimonialForm.reset();
-            testimonialForm.style.display = 'none';
-            if (formSuccess) formSuccess.style.display = 'block';
-        });
-    }
-
-    // --- Comment Form ---
-    var commentForm = document.getElementById('comment-form');
-    var commentsContainer = document.getElementById('comments-container');
-    if (commentForm) {
-        commentForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var author = document.getElementById('comment-author').value.trim();
-            var text = document.getElementById('comment-text').value.trim();
-            if (!author || !text) return;
-            var today = new Date();
-            var dateStr = today.toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric'
-            });
-            var commentDiv = document.createElement('div');
-            commentDiv.className = 'comment';
-            commentDiv.innerHTML =
-                '<div class="comment-header">' +
-                    '<span class="comment-author">' + escapeHtml(author) + '</span>' +
-                    '<span class="comment-date">' + dateStr + '</span>' +
-                '</div>' +
-                '<p class="comment-body">' + escapeHtml(text) + '</p>';
-            if (commentsContainer) {
-                commentsContainer.appendChild(commentDiv);
-            } else {
-                var wrap = document.querySelector('.comment-form-wrap');
-                if (wrap) wrap.parentNode.insertBefore(commentDiv, wrap);
-            }
-            commentForm.reset();
-            var badge = document.querySelector('.badge');
-            if (badge) {
-                badge.textContent = document.querySelectorAll('.comment').length + ' Comments';
-            }
-        });
-    }
 
     // --- Evidence Viewer ---
     var evidenceData = {
@@ -278,8 +469,8 @@
     }
 
     // --- Scroll-triggered slide-in for testimonials ---
-    var testimonials = document.querySelectorAll('.testimonial');
-    if ('IntersectionObserver' in window && testimonials.length) {
+    var testimonialCards = document.querySelectorAll('.testimonial');
+    if ('IntersectionObserver' in window && testimonialCards.length) {
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
@@ -288,9 +479,12 @@
                 }
             });
         }, { threshold: 0.15 });
-        testimonials.forEach(function (t) { observer.observe(t); });
+        testimonialCards.forEach(function (t) { observer.observe(t); });
     } else {
-        testimonials.forEach(function (t) { t.classList.add('visible'); });
+        testimonialCards.forEach(function (t) { t.classList.add('visible'); });
     }
+
+    // --- Update auth nav on page load ---
+    updateAuthNav();
 
 })();

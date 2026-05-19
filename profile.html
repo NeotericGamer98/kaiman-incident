@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | The Kaiman Investigation</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="header-badge">UNDER INVESTIGATION</div>
+    <button id="theme-toggle" class="theme-toggle">&#9774; Dark</button>
+    <div class="container">
+        <h1 class="firm-name">MEOWFURSHOT LAW GROUP</h1>
+        <p class="firm-subtitle">Company Motto Goes Here &bull; IDK LOL 2026</p>
+    </div>
+</header>
+
+<nav class="main-nav">
+    <div class="container">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="testimonials.html">Victim Testimonials</a></li>
+            <li><a href="evidence.html">Case Evidence</a></li>
+            <li><a href="auth.html" id="nav-login">Log In</a></li>
+            <li><a href="profile.html" class="active" id="nav-profile" style="display:none;">Profile</a></li>
+            <li><a href="#" id="nav-config">&#9881; Setup</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="case-status">
+    <div class="container">
+        <span class="status-dot"></span>
+        <span class="status-label">CASE STATUS:</span>
+        <span class="status-text">OPEN &bull; Investigation Ongoing</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Next Hearing: TBD</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Defendant: Uncooperative</span>
+    </div>
+</div>
+
+<main>
+    <section class="page-header section">
+        <div class="container">
+            <h2>Your Profile</h2>
+            <p class="subtitle">Manage your account settings and autofill preferences.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div id="profile-not-logged-in" class="card">
+                <p>You need to <a href="auth.html">log in</a> to view your profile.</p>
+            </div>
+
+            <div id="profile-content" style="display:none;">
+                <div class="card">
+                    <div class="form-group">
+                        <label for="profile-display">Display Name</label>
+                        <input type="text" id="profile-display" placeholder="Your display name">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-bio">Bio</label>
+                        <textarea id="profile-bio" rows="3" placeholder="Tell the court a little about yourself..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-convention">Convention History</label>
+                        <input type="text" id="profile-convention" placeholder="e.g., FC, FWA, MFF, FurSquared">
+                        <p class="form-note">This will be used to autofill the convention field when submitting testimonials.</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="profile-autofill" checked>
+                            <span>Enable autofill — automatically fill in your name and convention info on forms</span>
+                        </label>
+                    </div>
+                    <button id="profile-save" class="btn btn-primary">Save Profile</button>
+                    <p id="profile-success" class="form-note" style="color:#4ade80;display:none;margin-top:12px;">Profile saved!</p>
+                    <p id="profile-error" class="form-note" style="color:#b22222;display:none;margin-top:12px;"></p>
+                </div>
+
+                <div class="card card-red" style="margin-top:20px;">
+                    <h3>Log Out</h3>
+                    <p>Sign out of your account.</p>
+                    <button id="profile-logout" class="btn btn-secondary" style="color:#b22222;border-color:#b22222;">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p class="footer-disclaimer">
+            This website is a parody. All characters, incidents, and law firm names are fictional and created for humorous purposes. No actual legal services are being offered.
+        </p>
+        <p class="footer-copy">&copy; 2026 Meowfurshot Law Group &bull; For entertainment purposes only.</p>
+    </div>
+</footer>
+
+<div id="supabase-config-modal" class="lightbox" style="display:none;">
+    <div class="config-modal-box">
+        <h3>Supabase Setup</h3>
+        <p class="note">Enter your Supabase project URL and anon key to enable the database.</p>
+        <form id="supabase-config-form">
+            <div class="form-group">
+                <label for="supabase-url">Supabase URL</label>
+                <input type="url" id="supabase-url" placeholder="https://yourproject.supabase.co" required>
+            </div>
+            <div class="form-group">
+                <label for="supabase-key">Anon Key</label>
+                <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs..." required>
+            </div>
+            <div class="flex-row" style="justify-content:flex-end;margin-top:16px;">
+                <button type="button" id="supabase-config-cancel" class="btn btn-secondary" style="color:var(--text-primary);border-color:var(--border);">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/script.js"></script>
+<script>
+(function () {
+    var notLoggedIn = document.getElementById('profile-not-logged-in');
+    var profileContent = document.getElementById('profile-content');
+    var displayField = document.getElementById('profile-display');
+    var bioField = document.getElementById('profile-bio');
+    var conventionField = document.getElementById('profile-convention');
+    var autofillCheck = document.getElementById('profile-autofill');
+    var saveBtn = document.getElementById('profile-save');
+    var successMsg = document.getElementById('profile-success');
+    var errorMsg = document.getElementById('profile-error');
+    var logoutBtn = document.getElementById('profile-logout');
+
+    async function loadProfile() {
+        var user = KA.currentUser();
+        if (!user) {
+            notLoggedIn.style.display = 'block';
+            return;
+        }
+        notLoggedIn.style.display = 'none';
+        profileContent.style.display = 'block';
+        var profile = await KA.getProfile(user.id);
+        if (profile) {
+            displayField.value = profile.display_name || '';
+            bioField.value = profile.bio || '';
+            conventionField.value = profile.convention_history || '';
+            autofillCheck.checked = profile.autofill_enabled !== false;
+        }
+    }
+
+    loadProfile();
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async function () {
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            var result = await KA.updateProfile({
+                display_name: displayField.value.trim(),
+                bio: bioField.value.trim(),
+                convention_history: conventionField.value.trim(),
+                autofill_enabled: autofillCheck.checked
+            });
+            if (result && result.error) {
+                errorMsg.textContent = result.error.message || 'Failed to save.';
+                errorMsg.style.display = 'block';
+            } else {
+                successMsg.style.display = 'block';
+                setTimeout(function () { successMsg.style.display = 'none'; }, 3000);
+            }
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function () {
+            KA.signOut();
+        });
+    }
+})();
+</script>
+</body>
+</html>

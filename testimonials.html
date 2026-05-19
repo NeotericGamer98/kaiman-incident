@@ -31,6 +31,9 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="testimonials.html" class="active">Victim Testimonials</a></li>
             <li><a href="evidence.html">Case Evidence</a></li>
+            <li><a href="auth.html" id="nav-login">Log In</a></li>
+            <li><a href="profile.html" id="nav-profile" style="display:none;">Profile</a></li>
+            <li><a href="#" id="nav-config">&#9881; Setup</a></li>
         </ul>
     </div>
 </nav>
@@ -57,6 +60,8 @@
 
     <section class="testimonials-list section">
         <div class="container">
+            <div id="testimonials-container"></div>
+
             <article class="testimonial card card-red">
                 <div class="testimonial-header">
                     <span class="victim-label">BloodDonor (Victim A)</span>
@@ -330,10 +335,17 @@
                     <input type="text" id="victim-convention" placeholder="e.g., FC, FWA, MFF, FurSquared" required>
                 </div>
                 <div class="form-group">
+                    <label for="victim-impact">Impact Level</label>
+                    <select id="victim-impact" class="form-select">
+                        <option value="Moderate">Moderate</option>
+                        <option value="Severe">Severe</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="victim-story">Your Testimonial</label>
                     <textarea id="victim-story" rows="6" placeholder="Describe what happened. Be specific about the body part..." required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Testimonial</button>
+                <button type="submit" class="btn btn-primary" id="testimonial-submit">Submit Testimonial</button>
                 <p class="form-note">All testimonials will be reviewed before being added to the public record. Kaiman will not be notified (he already knows what he did).</p>
             </form>
             <div id="form-success" class="card card-gold display-none">
@@ -490,6 +502,30 @@
     </div>
 </footer>
 
+<div id="supabase-config-modal" class="lightbox" style="display:none;">
+    <div class="config-modal-box">
+        <h3>Supabase Setup</h3>
+        <p class="note">Enter your Supabase project URL and anon key to enable the database. Get these from your Supabase project dashboard under Settings &rarr; API.</p>
+        <form id="supabase-config-form">
+            <div class="form-group">
+                <label for="supabase-url">Supabase URL</label>
+                <input type="url" id="supabase-url" placeholder="https://yourproject.supabase.co" required>
+            </div>
+            <div class="form-group">
+                <label for="supabase-key">Anon Key</label>
+                <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs..." required>
+            </div>
+            <div class="flex-row" style="justify-content:flex-end;margin-top:16px;">
+                <button type="button" id="supabase-config-cancel" class="btn btn-secondary" style="color:var(--text-primary);border-color:var(--border);">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>

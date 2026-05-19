@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | The Kaiman Investigation</title>
+    <meta name="description" content="Log in or create an account to submit victim testimonials and comments.">
+    <meta property="og:title" content="Log In — The Kaiman Investigation">
+    <meta property="og:description" content="Log in or create an account to participate in the Kaiman Incident investigation.">
+    <meta property="og:image" content="https://neotericgamer98.github.io/kaiman-incident/assets/kaiman-avatar.png">
+    <meta property="og:url" content="https://neotericgamer98.github.io/kaiman-incident/auth.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="header-badge">UNDER INVESTIGATION</div>
+    <button id="theme-toggle" class="theme-toggle">&#9774; Dark</button>
+    <div class="container">
+        <h1 class="firm-name">MEOWFURSHOT LAW GROUP</h1>
+        <p class="firm-subtitle">Company Motto Goes Here &bull; IDK LOL 2026</p>
+    </div>
+</header>
+
+<nav class="main-nav">
+    <div class="container">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="testimonials.html">Victim Testimonials</a></li>
+            <li><a href="evidence.html">Case Evidence</a></li>
+            <li class="nav-right"><a href="auth.html" class="active" id="nav-login">Log In</a></li>
+            <li><a href="profile.html" id="nav-profile" style="display:none;">Profile</a></li>
+            <li><a href="#" id="nav-config">&#9881; Setup</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="case-status">
+    <div class="container">
+        <span class="status-dot"></span>
+        <span class="status-label">CASE STATUS:</span>
+        <span class="status-text">OPEN &bull; Investigation Ongoing</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Next Hearing: TBD</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Defendant: Uncooperative</span>
+    </div>
+</div>
+
+<main>
+    <section class="page-header section">
+        <div class="container">
+            <h2>Log In / Create Account</h2>
+            <p class="subtitle">Sign in to submit victim statements, post comments, and manage your profile. Your testimony matters.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log In</button>
+                <button class="auth-tab" data-tab="signup">Create Account</button>
+            </div>
+
+            <div id="auth-login" class="auth-form-wrap">
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login-submit">Log In</button>
+                    <p class="form-note" id="login-error" style="color:#b22222;display:none;"></p>
+                </form>
+            </div>
+
+            <div id="auth-signup" class="auth-form-wrap" style="display:none;">
+                <form id="signup-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="At least 6 characters" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-display">Display Name</label>
+                        <input type="text" id="signup-display" placeholder="How you'll appear on testimonials and comments">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="signup-submit">Create Account</button>
+                    <p class="form-note" id="signup-error" style="color:#b22222;display:none;"></p>
+                    <p class="form-note">By creating an account, you agree that the small of the back is NOT a consensual zone.</p>
+                </form>
+            </div>
+
+            <div id="auth-success" class="card card-gold display-none">
+                <p>Success! You're now part of the investigation. <a href="testimonials.html">Submit your testimonial</a> or <a href="profile.html">set up your profile</a>.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p class="footer-disclaimer">
+            This website is a parody. All characters, incidents, and law firm names are fictional and created for humorous purposes. No actual legal services are being offered.
+        </p>
+        <p class="footer-copy">&copy; 2026 Meowfurshot Law Group &bull; For entertainment purposes only.</p>
+    </div>
+</footer>
+
+<div id="supabase-config-modal" class="lightbox" style="display:none;">
+    <div class="config-modal-box">
+        <h3>Supabase Setup</h3>
+        <p class="note">Enter your Supabase project URL and anon key to enable the database. Get these from your Supabase project dashboard under Settings &rarr; API.</p>
+        <form id="supabase-config-form">
+            <div class="form-group">
+                <label for="supabase-url">Supabase URL</label>
+                <input type="url" id="supabase-url" placeholder="https://yourproject.supabase.co" required>
+            </div>
+            <div class="form-group">
+                <label for="supabase-key">Anon Key</label>
+                <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs..." required>
+            </div>
+            <div class="flex-row" style="justify-content:flex-end;margin-top:16px;">
+                <button type="button" id="supabase-config-cancel" class="btn btn-secondary" style="color:var(--text-primary);border-color:var(--border);">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/script.js"></script>
+<script>
+(function () {
+    var loginForm = document.getElementById('login-form');
+    var signupForm = document.getElementById('signup-form');
+    var loginError = document.getElementById('login-error');
+    var signupError = document.getElementById('signup-error');
+    var authLogin = document.getElementById('auth-login');
+    var authSignup = document.getElementById('auth-signup');
+    var authSuccess = document.getElementById('auth-success');
+    var tabs = document.querySelectorAll('.auth-tab');
+
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            tabs.forEach(function (t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            var target = this.getAttribute('data-tab');
+            authLogin.style.display = target === 'login' ? 'block' : 'none';
+            authSignup.style.display = target === 'signup' ? 'block' : 'none';
+        });
+    });
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var email = document.getElementById('login-email').value.trim();
+            var password = document.getElementById('login-password').value;
+            var btn = document.getElementById('login-submit');
+            btn.disabled = true;
+            loginError.style.display = 'none';
+            var result = await KA.signIn(email, password);
+            btn.disabled = false;
+            if (result.error) {
+                loginError.textContent = result.error.message || 'Login failed. Check your credentials.';
+                loginError.style.display = 'block';
+            } else {
+                loginForm.style.display = 'none';
+                authSuccess.style.display = 'block';
+                setTimeout(function () { window.location.href = 'profile.html'; }, 1500);
+            }
+        });
+    }
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var email = document.getElementById('signup-email').value.trim();
+            var password = document.getElementById('signup-password').value;
+            var display = document.getElementById('signup-display').value.trim();
+            var btn = document.getElementById('signup-submit');
+            btn.disabled = true;
+            signupError.style.display = 'none';
+            var result = await KA.signUp(email, password, {
+                display_name: display || email.split('@')[0],
+                username: email.split('@')[0]
+            });
+            btn.disabled = false;
+            if (result.error) {
+                signupError.textContent = result.error.message || 'Sign up failed.';
+                signupError.style.display = 'block';
+            } else {
+                signupForm.style.display = 'none';
+                authSuccess.style.display = 'block';
+                authSuccess.innerHTML = '<p>Account created! Check your email for a confirmation link, then log in. In the meantime, <a href="index.html">browse the case</a>.</p>';
+            }
+        });
+    }
+})();
+</script>
+</body>
+</html>

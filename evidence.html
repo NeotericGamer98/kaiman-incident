@@ -30,6 +30,9 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="testimonials.html">Victim Testimonials</a></li>
             <li><a href="evidence.html" class="active">Case Evidence</a></li>
+            <li><a href="auth.html" id="nav-login">Log In</a></li>
+            <li><a href="profile.html" id="nav-profile" style="display:none;">Profile</a></li>
+            <li><a href="#" id="nav-config">&#9881; Setup</a></li>
         </ul>
     </div>
 </nav>
@@ -252,6 +255,30 @@
     <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 
+<div id="supabase-config-modal" class="lightbox" style="display:none;">
+    <div class="config-modal-box">
+        <h3>Supabase Setup</h3>
+        <p class="note">Enter your Supabase project URL and anon key to enable the database.</p>
+        <form id="supabase-config-form">
+            <div class="form-group">
+                <label for="supabase-url">Supabase URL</label>
+                <input type="url" id="supabase-url" placeholder="https://yourproject.supabase.co" required>
+            </div>
+            <div class="form-group">
+                <label for="supabase-key">Anon Key</label>
+                <input type="text" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIs..." required>
+            </div>
+            <div class="flex-row" style="justify-content:flex-end;margin-top:16px;">
+                <button type="button" id="supabase-config-cancel" class="btn btn-secondary" style="color:var(--text-primary);border-color:var(--border);">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>
