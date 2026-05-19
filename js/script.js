@@ -135,7 +135,7 @@
                   '<p><strong>Date:</strong> April 2026</p>' +
                   '<hr>' +
                   '<h4>FINDINGS</h4>' +
-                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across four different conventions (FC, MFF, FurSquared, MegaPlex).</p>' +
+                  '<p><strong>1. Location Consistency:</strong> 100% of reported incidents occurred in convention bathroom facilities across three different conventions (FC, MFF, FurSquared).</p>' +
                   '<p><strong>2. Time of Day:</strong> All incidents occurred during peak convention hours (2PM&ndash;5PM).</p>' +
                   '<p><strong>3. Targeting Pattern:</strong> Victims were known associates, including "BloodDonor."</p>' +
                   '<p><strong>4. Body Part Specificity:</strong> The "small of the back" was the contact zone in every incident.</p>' +
