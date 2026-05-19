@@ -8,10 +8,25 @@
     if (!sb) return null;
     try {
       var { data } = await sb.auth.getUser();
-      return data ? data.user : null;
+      if (data && data.user) return data.user;
+      var { data: sessionData } = await sb.auth.getSession();
+      if (sessionData && sessionData.session) return sessionData.session.user;
+      return null;
     } catch (e) {
       return null;
     }
+  };
+
+  KA.waitForSession = function () {
+    var sb = getSupabase();
+    if (!sb) return null;
+    var stored = null;
+    for (var key in localStorage) {
+      if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
+        try { stored = JSON.parse(localStorage.getItem(key)); } catch (e) {}
+      }
+    }
+    return stored;
   };
 
   KA.signUp = async function (email, password, metadata) {
