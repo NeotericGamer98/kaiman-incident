@@ -216,6 +216,30 @@
         });
     }
 
+    var viewerPrint = document.getElementById('viewer-print');
+    if (viewerPrint && viewerBody) {
+        viewerPrint.addEventListener('click', function () {
+            var printContents = viewerBody.innerHTML;
+            var title = viewerTitle ? viewerTitle.textContent : 'Case Document';
+            var win = window.open('', '_blank');
+            if (win) {
+                win.document.write(
+                    '<!DOCTYPE html><html><head><title>' + title + '</title>' +
+                    '<link rel="stylesheet" href="css/style.css" type="text/css">' +
+                    '</head><body style="background:#fff;color:#000;padding:40px;font-family:Georgia,serif;">' +
+                    '<h2 style="margin-bottom:16px;">' + title + '</h2>' +
+                    '<div>' + printContents + '</div>' +
+                    '<p style="margin-top:40px;font-size:0.75rem;color:#999;text-align:center;border-top:1px solid #ccc;padding-top:12px;">' +
+                    'Meowfurshot Law Group &bull; For entertainment purposes only. &bull; Printed from kaiman-incident</p>' +
+                    '</body></html>'
+                );
+                win.document.close();
+                win.focus();
+                win.print();
+            }
+        });
+    }
+
     // --- Lightbox for gallery images ---
     var lightbox = document.getElementById('lightbox');
     var lightboxImg = document.getElementById('lightbox-img');

@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Case Evidence | The Kaiman Investigation</title>
+    <meta name="description" content="Evidence locker for the Kaiman Incident investigation. View exhibits including incident reports, screenshots, and analysis.">
+    <meta property="og:title" content="Case Evidence — The Kaiman Investigation">
+    <meta property="og:description" content="Evidence locker with exhibits A through I: incident reports, chat screenshots, staff statements, and pattern analysis.">
+    <meta property="og:image" content="https://neotericgamer98.github.io/kaiman-incident/assets/kaiman-avatar.png">
+    <meta property="og:url" content="https://neotericgamer98.github.io/kaiman-incident/evidence.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -25,6 +33,18 @@
         </ul>
     </div>
 </nav>
+
+<div class="case-status">
+    <div class="container">
+        <span class="status-dot"></span>
+        <span class="status-label">CASE STATUS:</span>
+        <span class="status-text">OPEN &bull; Investigation Ongoing</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Next Hearing: TBD</span>
+        <span class="status-divider">|</span>
+        <span class="status-meta">Defendant: Uncooperative</span>
+    </div>
+</div>
 
 <main>
     <section class="page-header section">
@@ -167,7 +187,10 @@
             <div id="evidence-viewer" class="evidence-viewer card" style="display:none;">
                 <div class="viewer-header">
                     <h3 id="viewer-title">Document</h3>
-                    <button id="viewer-close" class="btn-close">&times;</button>
+                    <div class="viewer-actions">
+                        <button id="viewer-print" class="btn-print" title="Print / Save as PDF">&#128424; Print</button>
+                        <button id="viewer-close" class="btn-close">&times;</button>
+                    </div>
                 </div>
                 <div class="viewer-body" id="viewer-body">
                 </div>
