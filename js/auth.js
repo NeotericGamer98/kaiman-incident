@@ -7,26 +7,25 @@
     var sb = getSupabase();
     if (!sb) return null;
     try {
-      var { data } = await sb.auth.getUser();
-      if (data && data.user) return data.user;
-      var { data: sessionData } = await sb.auth.getSession();
-      if (sessionData && sessionData.session) return sessionData.session.user;
+      var { data } = await sb.auth.getSession();
+      if (data && data.session && data.session.user) return data.session.user;
       return null;
     } catch (e) {
+      console.error('currentUser error:', e);
       return null;
     }
   };
 
-  KA.waitForSession = function () {
-    var sb = getSupabase();
-    if (!sb) return null;
-    var stored = null;
+  KA.getSessionToken = function () {
     for (var key in localStorage) {
       if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
-        try { stored = JSON.parse(localStorage.getItem(key)); } catch (e) {}
+        try {
+          var stored = JSON.parse(localStorage.getItem(key));
+          if (stored && stored.access_token) return stored.access_token;
+        } catch (e) {}
       }
     }
-    return stored;
+    return null;
   };
 
   KA.signUp = async function (email, password, metadata) {
