@@ -859,10 +859,13 @@ a:hover {
 
 .kaiman-gallery .gallery-item img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
     display: block;
+    cursor: pointer;
     border-bottom: 1px solid var(--border);
+    background: #000;
 }
 
 .kaiman-gallery .gallery-item .gallery-desc {
@@ -875,11 +878,63 @@ a:hover {
 
 @media (min-width: 600px) {
     .kaiman-gallery {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
     .kaiman-gallery .gallery-item img {
-        height: 220px;
+        max-height: 600px;
     }
+}
+
+/* --- Lightbox --- */
+.lightbox {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: fadeIn 0.2s ease;
+}
+
+.lightbox-content {
+    max-width: 95%;
+    max-height: 90%;
+    object-fit: contain;
+    display: block;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-size: 2.5rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.lightbox-close:hover {
+    opacity: 1;
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: 20px;
+    color: #ccc;
+    text-align: center;
+    width: 100%;
+    padding: 0 24px;
+    font-size: 0.9rem;
+    font-style: italic;
+    pointer-events: none;
 }
 
 /* --- Site Footer --- */

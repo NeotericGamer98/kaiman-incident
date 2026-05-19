@@ -216,6 +216,37 @@
         });
     }
 
+    // --- Lightbox for gallery images ---
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var lightboxCaption = document.getElementById('lightbox-caption');
+    var lightboxClose = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.kaiman-gallery .gallery-item img').forEach(function (img) {
+        img.addEventListener('click', function () {
+            if (!lightbox || !lightboxImg) return;
+            lightboxImg.src = this.src;
+            var desc = this.closest('.gallery-item').querySelector('.gallery-desc');
+            if (lightboxCaption) {
+                lightboxCaption.textContent = desc ? desc.textContent : '';
+            }
+            lightbox.style.display = 'flex';
+        });
+    });
+
+    if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox || e.target === lightboxClose) {
+                lightbox.style.display = 'none';
+            }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && lightbox.style.display !== 'none') {
+                lightbox.style.display = 'none';
+            }
+        });
+    }
+
     function escapeHtml(str) {
         var div = document.createElement('div');
         div.appendChild(document.createTextNode(str));
