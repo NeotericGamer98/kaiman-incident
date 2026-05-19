@@ -77,12 +77,12 @@
     async function loadTestimonials() {
         if (!testimonialsContainer) return;
         var sb = getSupabase();
-        if (!sb) return;
+        if (!sb) { initScrollReveal(); return; }
         var { data, error } = await sb
             .from('testimonials')
             .select('*')
             .order('created_at', { ascending: false });
-        if (error || !data || data.length === 0) return;
+        if (error || !data || data.length === 0) { initScrollReveal(); return; }
         data.forEach(function (t) {
             var article = document.createElement('article');
             var isSevere = t.impact_level === 'Severe';
@@ -102,6 +102,7 @@
                 '</div>';
             testimonialsContainer.appendChild(article);
         });
+        initScrollReveal();
     }
 
     loadTestimonials();
@@ -125,7 +126,7 @@
             var story = document.getElementById('victim-story').value.trim();
             var impact = document.getElementById('victim-impact').value;
             if (!name || !convention || !story) return;
-            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px;vertical-align:middle;margin-right:6px;"></span> Submitting...'; }
             var sb = getSupabase();
             if (sb) {
                 await sb.from('testimonials').insert({
@@ -139,7 +140,7 @@
             testimonialForm.reset();
             testimonialForm.style.display = 'none';
             if (formSuccess) formSuccess.style.display = 'block';
-            if (submitBtn) submitBtn.disabled = false;
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Testimonial'; }
         });
     }
 
@@ -203,6 +204,8 @@
             var author = document.getElementById('comment-author').value.trim();
             var text = document.getElementById('comment-text').value.trim();
             if (!author || !text) return;
+            var commBtn = commentForm.querySelector('button[type="submit"]');
+            if (commBtn) { commBtn.disabled = true; commBtn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px;vertical-align:middle;margin-right:6px;"></span> Posting...'; }
             var today = new Date();
             var dateStr = today.toLocaleDateString('en-US', {
                 year: 'numeric', month: 'long', day: 'numeric'
@@ -230,6 +233,7 @@
                 if (wrap) wrap.parentNode.insertBefore(commentDiv, wrap);
             }
             commentForm.reset();
+            if (commBtn) { commBtn.disabled = false; commBtn.textContent = 'Post Comment'; }
             var badge = document.querySelector('.badge');
             if (badge) {
                 badge.textContent = document.querySelectorAll('.comment').length + ' Comments';
@@ -473,20 +477,80 @@
         return div.innerHTML;
     }
 
-    // --- Scroll-triggered slide-in for testimonials ---
-    var testimonialCards = document.querySelectorAll('.testimonial');
-    if ('IntersectionObserver' in window && testimonialCards.length) {
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-        testimonialCards.forEach(function (t) { observer.observe(t); });
-    } else {
-        testimonialCards.forEach(function (t) { t.classList.add('visible'); });
+    // --- Scroll-triggered reveal for all animated elements ---
+    function initScrollReveal() {
+        var autoReveal = document.querySelectorAll(
+            '.card, .timeline-item, .evidence-item, .finding, ' +
+            '.section-title, .subtitle, .defendant-card, .gallery-item, ' +
+            '.hero h2, .hero .case-subtitle, .hero .case-number'
+        );
+        autoReveal.forEach(function (el) {
+            if (!el.classList.contains('testimonial')) {
+                el.classList.add('reveal');
+            }
+        });
+        var selectors = '.reveal, .reveal-left, .reveal-right, .reveal-scale, .testimonial';
+        var elements = document.querySelectorAll(selectors);
+        if ('IntersectionObserver' in window && elements.length) {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            elements.forEach(function (el) { observer.observe(el); });
+        } else {
+            elements.forEach(function (el) { el.classList.add('visible'); });
+        }
+    }
+    initScrollReveal();
+
+    // --- Back to Top button ---
+    var backToTop = document.createElement('button');
+    backToTop.className = 'back-to-top';
+    backToTop.innerHTML = '&#8593;';
+    backToTop.setAttribute('aria-label', 'Back to top');
+    document.body.appendChild(backToTop);
+
+    var scrollThreshold = 300;
+    function updateBackToTop() {
+        if (window.scrollY > scrollThreshold) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    }
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    updateBackToTop();
+
+    backToTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // --- Smooth anchor scroll for internal links ---
+    document.addEventListener('click', function (e) {
+        var target = e.target.closest('a[href^="#"]');
+        if (target) {
+            var id = target.getAttribute('href').slice(1);
+            var el = document.getElementById(id);
+            if (el) {
+                e.preventDefault();
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+
+    // --- Stagger entrance for dynamically added testimonials ---
+    if (testimonialsContainer) {
+        var origInsert = testimonialsContainer.appendChild;
+        testimonialsContainer.appendChild = function (child) {
+            var result = origInsert.call(this, child);
+            var delay = 0.05 * this.children.length;
+            child.style.transitionDelay = delay + 's';
+            return result;
+        };
     }
 
     // --- Update auth nav on page load ---
