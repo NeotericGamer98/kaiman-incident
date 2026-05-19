@@ -36,6 +36,19 @@ Kaiman Incident parody law firm site (https://github.com/NeotericGamer98/kaiman-
 - **Fix**: Switched `KA.currentUser()` from `getUser()` to `getSession()` which properly awaits `initializePromise` and calls `__loadSession()` to read from localStorage
 - **Also added**: `KA.getSessionToken()` for manual localStorage inspection, `console.error` in catch for debugging
 
+### Modern UI Overhaul
+- **Glassmorphism nav** — `backdrop-filter: blur(12px)` with semi-transparent background
+- **Gradient text shimmer** — firm name animates through gold gradient
+- **Card hover lift** — 4px float with enhanced shadow
+- **Button ripple** — `::after` expands on click
+- **Hero drift** — slow background parallax animation
+- **Scroll reveal** — IntersectionObserver triggers 4 animation variants (fade-up, slide-left, slide-right, scale-in)
+- **Staggered entrance** — `.stagger` parent delays children 0.05-0.5s
+- **Back-to-top button** — appears at 300px scroll, smooth scroll
+- **Loading spinner** — CSS-only, used in form submit buttons
+- **Enhanced timeline** — pulsing dots with staggered delays
+- **Lightbox zoom-in**, form focus glow, auth/viewer entrances, footer gradient
+
 ### Security Notes
 - Service role key was accidentally committed; removed from history (GitHub secret scan blocked the push)
 - Migration scripts with secrets deleted from repo
